@@ -19,7 +19,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "commander": "^12.1.0",
+    "commander": "^15.0.0",
     "@shipcheck/core": "workspace:*",
     "@shipcheck/webcheck": "workspace:*",
     "@shipcheck/checks": "workspace:*",
