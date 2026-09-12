@@ -1,0 +1,30 @@
+{
+  "name": "shipcheck",
+  "version": "0.1.0",
+  "description": "ShipCheck — open-source pre-deployment quality gate for websites",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "shipcheck": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && chmod +x dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "@shipcheck/core": "workspace:*",
+    "@shipcheck/webcheck": "workspace:*",
+    "@shipcheck/checks": "workspace:*",
+    "@shipcheck/scoring": "workspace:*",
+    "@shipcheck/reporters": "workspace:*",
+    "@shipcheck/shared": "workspace:*"
+  }
+}
