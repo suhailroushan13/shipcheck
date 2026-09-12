@@ -115,18 +115,35 @@ describe("shipcheck CLI", () => {
     expect(result.stderr + result.stdout).not.toContain("at ");
   });
 
-  it("errors when --html is given without a filename", async () => {
+  it("rejects an unknown flag via the <url> shorthand too", async () => {
+    const result = await runCli(["--bogus-flag", "https://example.com"]);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr + result.stdout).not.toContain("at ");
+  });
+
+  it("errors when --html is given without a filename (end of args)", async () => {
     const result = await runCli(["webcheck", "https://example.com", "--html"]);
     expect(result.exitCode).not.toBe(0);
   });
 
-  it("errors when --markdown is given without a filename", async () => {
+  it("errors when --html is immediately followed by another flag, instead of swallowing it as the filename", async () => {
+    const result = await runCli(["webcheck", "https://example.com", "--html", "--verbose"]);
+    expect(result.exitCode).not.toBe(0);
+  });
+
+  it("errors when --markdown is given without a filename (end of args)", async () => {
     const result = await runCli(["webcheck", "https://example.com", "--markdown"]);
+    expect(result.exitCode).not.toBe(0);
+  });
+
+  it("errors when --markdown is immediately followed by another flag, instead of swallowing it as the filename", async () => {
+    const result = await runCli(["webcheck", "https://example.com", "--markdown", "--json"]);
     expect(result.exitCode).not.toBe(0);
   });
 
   it("--help exits 0 and lists the webcheck command", async () => {
     const result = await runCli(["--help"]);
     expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("webcheck");
   });
 });

@@ -1,4 +1,18 @@
-import { Command } from "commander";
+import { Command, InvalidArgumentError } from "commander";
+
+/**
+ * Commander's default mandatory-value option parsing (`--flag <value>`)
+ * happily swallows the next token as the value even if that token is itself
+ * a known flag (e.g. `--html --verbose` would set html="--verbose" and
+ * silently drop --verbose). Options whose value is a filename must reject
+ * anything that looks like a flag instead.
+ */
+function requireFilenameArg(value: string): string {
+  if (value.startsWith("-")) {
+    throw new InvalidArgumentError("expected a filename, got a flag.");
+  }
+  return value;
+}
 
 export interface WebcheckOptions {
   verbose?: boolean;
@@ -31,8 +45,8 @@ export function registerWebcheckCommand(program: Command): Command {
     .description("Run a WebCheck audit against <url>")
     .option("--verbose", "print full details for every finding")
     .option("--json", "output the report as JSON")
-    .option("--html <file>", "write a standalone HTML report to <file>")
-    .option("--markdown <file>", "write a Markdown report to <file>")
+    .option("--html <file>", "write a standalone HTML report to <file>", requireFilenameArg)
+    .option("--markdown <file>", "write a Markdown report to <file>", requireFilenameArg)
     .option("--ci", "run in CI mode (exit non-zero on threshold violations)")
     .option("--mobile", "emulate a mobile viewport")
     .option("--desktop", "emulate a desktop viewport")
@@ -44,6 +58,10 @@ export function registerWebcheckCommand(program: Command): Command {
     )
     .option("--max-critical <n>", "maximum allowed critical findings in --ci mode")
     .option("--max-warnings <n>", "maximum allowed warnings in --ci mode")
+    // Commander already copies the parent's exitOverride onto subcommands
+    // created via program.command(); repeated here only for readers who
+    // aren't sure that inheritance happens and might otherwise "fix" a
+    // perceived gap by re-adding it in the wrong place.
     .exitOverride()
     .action((url: string, options: WebcheckOptions) => {
       runWebcheckStub(url, options);

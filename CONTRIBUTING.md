@@ -6,4 +6,4 @@ Thanks for your interest in contributing! ShipCheck is designed so that adding o
 
 1. `pnpm install`
 2. `pnpm lint && pnpm typecheck && pnpm test && pnpm build`
-3. Open a PR against `main` with a clear description of what changed and why.
+3. Open a PR against `master` with a clear description of what changed and why.
