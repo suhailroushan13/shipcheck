@@ -15,7 +15,7 @@ jobs:
       # from package.json's "packageManager" field. Specifying both makes
       # pnpm hard-error with "Multiple versions of pnpm specified"
       # (ERR_PNPM_BAD_PM_VERSION).
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - uses: actions/setup-node@v4
         with:
